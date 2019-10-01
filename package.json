@@ -1,0 +1,30 @@
+{
+	"name": "pdf-merger",
+	"version": "1.0.0",
+	"description": "Gui for merging pdfs",
+	"main": "main.js",
+	"scripts": {
+		"start": "electron .",
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"pack": "electron-builder --dir",
+		"dist": "electron-builder",
+		"distAll": "electron-builder -mwl",
+		"postinstall": "electron-builder install-app-deps"
+	},
+	"author": "",
+	"license": "UNLICENSED",
+	"devDependencies": {
+		"electron": "^6.0.3",
+		"electron-builder": "^21.2.0"
+	},
+	"build": {
+		"appId": "com.snes.pdf-merger",
+		"mac": {
+			"category": "tool"
+		}
+	},
+	"dependencies": {
+		"fix-path": "^2.1.0",
+		"hummus": "^1.0.107"
+	}
+}

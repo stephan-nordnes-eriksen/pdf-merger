@@ -1,0 +1,12 @@
+#directories
+bower_components
+node_modules
+dist
+
+#files
+*.tgz
+*.log
+
+.DS_Store
+
+*.pdf

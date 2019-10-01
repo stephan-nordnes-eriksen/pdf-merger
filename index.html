@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>PDF Merger</title>
+	<style>
+		body {
+			font-family: Arial, Helvetica, sans-serif;
+			font-weight: 100;
+
+			min-height: 100vh;
+			display: flex;
+			flex-direction: column;
+		}
+		#exit {
+			position: absolute;
+			z-index: 1000;
+			font-size: 2em;
+			text-align: center;
+			right: 0;
+			top: 0;
+			margin: 0px;;
+			padding: 10px;
+			min-width: 2em;
+			border-radius: 0 0 0 20px;
+			font-family: Arial, Helvetica, sans-serif;
+		}
+		#exit:hover {
+			background: #fc2929;
+			color: white;
+		}
+		a {
+			color: #378de5;
+		}
+
+		h1 {
+			font-weight: 100;
+		}
+		.row {
+			display: flex;
+			flex-direction: row;
+			margin: 15px;
+		}
+		.column1 {
+			flex: 1;
+		}
+		.column2 {
+			flex: 2;
+		}
+		.column4 {
+			flex: 4;
+		}
+		.column8 {
+			flex: 8;
+		}
+
+		.fileRow {
+			display: flex;
+			flex-direction: row;
+			flex: 1;
+			text-align: center;
+			padding: 1em;
+		}
+
+		.fancyButton {
+			-moz-box-shadow: 3px 4px 0px 0px #1564ad;
+			-webkit-box-shadow: 3px 4px 0px 0px #1564ad;
+			box-shadow: 3px 4px 0px 0px #1564ad;
+			background-color:#79bbff;
+			-moz-border-radius:5px;
+			-webkit-border-radius:5px;
+			border-radius:5px;
+			border:1px solid #337bc4;
+			display:inline-block;
+			cursor:pointer;
+			color:#ffffff;
+			font-family:Arial;
+			font-size:17px;
+			line-height: 34px;
+			font-weight:bold;
+			padding:12px 44px;
+			text-decoration:none;
+			text-shadow:0px 1px 0px #528ecc;
+			margin: 5px;
+			-webkit-user-select: none;
+		}
+		.fancyButton:hover {
+			background-color:#378de5;
+		}
+		.fancyButton:active {
+			position:relative;
+			top:1px;
+		}
+
+		#loading {
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+
+			background-color: #18b6ff;
+			opacity: 0.5;
+			text-align: center;
+			font-size: 2em;
+			line-height: 100%;
+		}
+		#loadingText {
+			color: white;
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			width: 50%;
+			height: 10%;
+			margin: auto;
+		}
+		.noselect {
+			-webkit-user-select: none;
+		}
+		#drag-file {
+			background-color: red;
+			flex: 1;
+		}
+		#drag-file.dragging {
+			background-color: blue;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="exit" class="noselect" onclick="askShutdown()">x</div>
+	<div class="row">
+		<h1 class="column1 noselect">PDF Merger</h1>
+	</div>
+	<!-- <div class="row">
+		<h3 id="folderIndicator" class="column8">No folder selected</h3>
+		<a id="refresh" class="fancyButton column1" onclick="refreshDirectory()">Refresh</a>
+		<a id="selectFolderButton" class="fancyButton column2" onclick="selectDirectory()">Select a Folder</a>
+	</div> -->
+	<div id="drag-file">
+		<p>Just drop all your PDFs here to merge them.</p>
+	</div>
+	<script type="text/javascript" charset="utf-8">
+		const { ipcRenderer } = require('electron')
+		function askShutdown() {
+			if(confirm('Exit?')){
+				ipcRenderer.send('shutdown')
+			}
+		}
+		onkeydown = function (e) {
+			if(e.which === 27) {
+				askShutdown()
+			}
+		}
+		function refreshDirectory(event) {
+			document.getElementById('loading').style.display = ''
+			let deleteThese = document.getElementsByClassName('deleteOnRefresh')
+			while(deleteThese[0]) {
+				deleteThese[0].parentNode.removeChild(deleteThese[0])
+			}
+			ipcRenderer.send('selectedDirectory', currentFolder)
+		}
+		function selectDirectory(event) {
+			console.log('folderSelected')
+			ipcRenderer.send('selectDirectory')
+			document.getElementById('loading').style.display = ''
+		}
+		function setDragStart(element) {
+			element.ondragstart = (event) => {
+				event.preventDefault()
+				ipcRenderer.send('ondragstart', element.getAttribute('path'))
+			}
+			element.onclick = (event) => {
+				ipcRenderer.send('openfile', element.getAttribute('path'))
+			}
+		}
+		let currentFolder = localStorage.getItem('selected-folder')
+		if (currentFolder) {
+			refreshDirectory()
+		}
+		ipcRenderer.on('folderSelected', function (event, folder) {
+			currentFolder = folder
+			if(!folder) {	
+				document.getElementById('folderIndicator').innerHTML = 'No folder selected'
+				document.getElementById('selectFolderButton').innerHTML = 'Select a Folder'
+			} else {
+				document.getElementById('folderIndicator').innerHTML = '<span class="noselect">Folder: </span>' + folder
+				document.getElementById('selectFolderButton').innerHTML = 'Change Folder'
+			}
+			localStorage.setItem('selected-folder', folder)
+		})
+		ipcRenderer.on('log', (event, data) => {
+			console.log(...data)
+		})
+		ipcRenderer.on('error', (event, data) => {
+			console.error(...data)
+		})
+		ipcRenderer.on('pdfFileMerged', function (event, outFilePath) {
+			alert('File merged' + outFilePath)
+		})
+		
+		let draggables = document.getElementsByClassName('draggable')
+		Array.prototype.forEach.call(draggables, function (draggable) {
+			setDragStart(draggable)
+		})
+		const handleOndrop = (e) => {
+			e.preventDefault();
+			console.log('are we here at all?')
+			
+            for (let f of e.dataTransfer.files) {
+				console.log('File(s) you dragged here: ', f.path)
+            }
+            
+            return false;
+        }
+		// document.getElementById('noselect').ondrop = handleOndrop
+		var holder = document.getElementById('drag-file');
+
+        holder.ondragover = () => {
+			document.getElementById('drag-file').classList.add('dragging')
+            return false;
+        };
+
+        holder.ondragleave = () => {
+			document.getElementById('drag-file').classList.remove('dragging')
+            return false;
+        };
+		
+        holder.ondragend = () => {
+			document.getElementById('drag-file').classList.remove('dragging')
+            return false;
+        };
+
+        holder.ondrop = (e) => {
+			e.preventDefault();
+			document.getElementById('drag-file').classList.remove('dragging')
+			console.log('dropped here')
+			let filePaths = []
+            for (let f of e.dataTransfer.files) {
+				filePaths.push(f.path)
+                console.log('File(s) you dragged here: ', f.path)
+            }
+			console.log('e', e)
+			console.log('e.dataTransfer.files', e.dataTransfer.files)
+			console.log('typeof e.dataTransfer.files', typeof e.dataTransfer.files)
+			ipcRenderer.send('mergePDFFiles', filePaths)
+
+            return false;
+        };
+
+
+</script>
+</body>
+
+</html>
