@@ -194,7 +194,11 @@
 		}
 		onkeydown = function (e) {
 			if(e.which === 27) {
-				askShutdown()
+				if(fileCollection.length > 0) {
+					cancelCollection()
+				} else {
+					askShutdown()
+				}
 			}
 		}
 		function refreshDirectory(event) {
