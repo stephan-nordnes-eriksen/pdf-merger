@@ -1,1 +1,4 @@
-- [ ] Make cleaner design
+- [X] Make cleaner design
+- [ ] Ability to remove files from collection
+- [ ] Ability to move files in collection
+- [X] Remove the scrolling effect that is happening
