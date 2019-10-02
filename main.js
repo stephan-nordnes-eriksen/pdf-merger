@@ -183,7 +183,7 @@ ipcMain.on('mergePDFFiles', (event, filePaths) => {
 		return pdfPath.endsWith('.pdf')
 	})
 	if(onlyPDFFiles.length > 0) {
-		const outPath = Date.now() + ".pdf"
+		const outPath = path.join(path.dirname(filePaths[0]),'pdf-merger-' + Date.now() + ".pdf")
 		mergePDFFiles(outPath, onlyPDFFiles)
 		win.webContents.send('pdfFileMerged', outPath)
 	}
