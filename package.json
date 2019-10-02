@@ -12,8 +12,8 @@
 		"postinstall": "electron-builder install-app-deps"
 	},
 	"repository": {
-		"type" : "git",
-		"url" : "https://github.com/stephan-nordnes-eriksen/pdf-merger.git"
+		"type": "git",
+		"url": "https://github.com/stephan-nordnes-eriksen/pdf-merger.git"
 	},
 	"author": "",
 	"license": "UNLICENSED",
