@@ -23,9 +23,9 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: npm install, build, and test
       run: |
-        npm install
-        npm run build --if-present
-        npm dist
+        yarn install
+        yarn build --if-present
+        yarn dist
       env:
         CI: true
     - name: Github Create Release
