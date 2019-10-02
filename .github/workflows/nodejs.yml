@@ -32,9 +32,9 @@ jobs:
         CI: true
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Git Tag
-        run: |
-          git tag $(date +'%Y%m%d%H%M%S')
-        shell: bash
+      run: |
+        git tag $(date +'%Y%m%d%H%M%S')
+      shell: bash
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
