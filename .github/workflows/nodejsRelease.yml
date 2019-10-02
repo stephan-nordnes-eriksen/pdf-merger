@@ -20,15 +20,15 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - name: Install
-      run: yarn install
+      run: npm install
     - name: Temporarily fix electron-builder
       run: |
         sed -i '' 's/\^\[\\w/\^\[.\\w/g' node_modules/builder-util/out/util.js
       shell: bash
     - name: Install hummus
-      run: npm install -g --unsafe-perm hummus
+      run: npm install --unsafe-perm hummus
     - name: Build
-      run: yarn distAll
+      run: npm run distAll
       env:
         CI: true
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
