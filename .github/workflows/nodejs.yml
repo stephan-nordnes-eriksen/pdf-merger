@@ -22,12 +22,14 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: Install
       run: yarn install
+    - name: Install hummus
+      run: npm install -g --unsafe-perm hummus
     - name: Temporarily fix electron-builder
       run: |
         sed -i '' 's/\^\[\\w/\^\[.\\w/g' node_modules/builder-util/out/util.js
       shell: bash
     - name: Build
-      run: yarn dist
+      run: yarn distAll
       env:
         CI: true
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

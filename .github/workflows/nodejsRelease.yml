@@ -25,6 +25,8 @@ jobs:
       run: |
         sed -i '' 's/\^\[\\w/\^\[.\\w/g' node_modules/builder-util/out/util.js
       shell: bash
+    - name: Install hummus
+      run: npm install -g --unsafe-perm hummus
     - name: Build
       run: yarn distAll
       env:
