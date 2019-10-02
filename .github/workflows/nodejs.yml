@@ -24,7 +24,7 @@ jobs:
       run: yarn install
     - name: Temporarily fix electron-builder
       run: |
-        sed -i 's/\^\[\\w/\^\[.\\w/g' node_modules/builder-util/out/util.js
+        sed -i '' 's/\^\[\\w/\^\[.\\w/g' node_modules/builder-util/out/util.js
       shell: bash
     - name: Build
       run: yarn dist
