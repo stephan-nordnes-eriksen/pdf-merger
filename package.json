@@ -1,7 +1,7 @@
 {
 	"name": "pdf-merger",
 	"version": "1.0.5",
-	"description": "Gui for merging pdfs",
+	"description": "Gui for merging PDFs",
 	"main": "main.js",
 	"scripts": {
 		"start": "electron .",
@@ -15,8 +15,8 @@
 		"type": "git",
 		"url": "https://github.com/stephan-nordnes-eriksen/pdf-merger.git"
 	},
-	"author": "",
-	"license": "UNLICENSED",
+	"author": "Stephan Nordnes Eriksen",
+	"license": "MIT",
 	"devDependencies": {
 		"electron": "^6.0.3",
 		"electron-builder": "^21.2.0"
