@@ -3,6 +3,8 @@ Simple Cross platform PDF merger gui. Should work on most platforms (Windows, Li
 
 Drag-n-drop PDF files to merge them into one. Drop multiple files into the the `instant merge.` to immediately merge all the dropped PDF-files. Drop one or more PDF files into the `collection merge.` to make a collection. Drop more files until you have collected all, and finally click "merge" to merge all the files in the order that they were dropped in.
 
+The resulting merged PDF file will be located in the directory of the first PDF file in the merge. This will likely change in the future.
+
 # Download
 Go to the [releases](https://github.com/stephan-nordnes-eriksen/pdf-merger/releases) tab to get the latest version for your platform.
 
