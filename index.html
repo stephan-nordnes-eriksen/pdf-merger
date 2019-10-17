@@ -14,12 +14,15 @@
 			flex-direction: column;
 			margin: 0;
 		}
-		#title{
+
+		#title {
 			text-align: center
 		}
+
 		.marker {
 			color: #fc2929;
 		}
+
 		#exit {
 			position: absolute;
 			z-index: 1000;
@@ -27,16 +30,18 @@
 			text-align: center;
 			right: 0;
 			top: 0;
-			margin: 0px;;
+			margin: 0px;
 			padding: 10px;
 			min-width: 2em;
 			border-radius: 0 0 0 40px;
 			font-family: Arial, Helvetica, sans-serif;
 		}
+
 		#exit:hover {
 			background: #fc2929;
 			color: white;
 		}
+
 		a {
 			color: #378de5;
 		}
@@ -44,20 +49,25 @@
 		h1 {
 			font-weight: 100;
 		}
+
 		.row {
 			display: flex;
 			flex-direction: row;
 			margin: 15px;
 		}
+
 		.column1 {
 			flex: 1;
 		}
+
 		.column2 {
 			flex: 2;
 		}
+
 		.column4 {
 			flex: 4;
 		}
+
 		.column8 {
 			flex: 8;
 		}
@@ -74,30 +84,32 @@
 			-moz-box-shadow: 3px 4px 0px 0px #1564ad;
 			-webkit-box-shadow: 3px 4px 0px 0px #1564ad;
 			box-shadow: 3px 4px 0px 0px #1564ad;
-			background-color:#79bbff;
-			-moz-border-radius:5px;
-			-webkit-border-radius:5px;
-			border-radius:5px;
-			border:1px solid #337bc4;
-			display:inline-block;
-			cursor:pointer;
-			color:#ffffff;
-			font-family:Arial;
-			font-size:17px;
+			background-color: #79bbff;
+			-moz-border-radius: 5px;
+			-webkit-border-radius: 5px;
+			border-radius: 5px;
+			border: 1px solid #337bc4;
+			display: inline-block;
+			cursor: pointer;
+			color: #ffffff;
+			font-family: Arial;
+			font-size: 17px;
 			line-height: 34px;
-			font-weight:bold;
-			padding:12px 44px;
-			text-decoration:none;
-			text-shadow:0px 1px 0px #528ecc;
+			font-weight: bold;
+			padding: 12px 44px;
+			text-decoration: none;
+			text-shadow: 0px 1px 0px #528ecc;
 			margin: 5px;
 			-webkit-user-select: none;
 		}
+
 		.fancyButton:hover {
-			background-color:#378de5;
+			background-color: #378de5;
 		}
+
 		.fancyButton:active {
-			position:relative;
-			top:1px;
+			position: relative;
+			top: 1px;
 		}
 
 		#loading {
@@ -113,6 +125,7 @@
 			font-size: 2em;
 			line-height: 100%;
 		}
+
 		#loadingText {
 			color: white;
 			position: absolute;
@@ -124,12 +137,15 @@
 			height: 10%;
 			margin: auto;
 		}
+
 		.noselect {
 			-webkit-user-select: none;
 		}
+
 		.fillRest {
 			flex: 1
 		}
+
 		.dragFileArea {
 			/* background-color: red; */
 			text-align: center;
@@ -138,32 +154,41 @@
 			flex: 1;
 			border-radius: 40px;
 		}
+
 		#dragFileInstant.dragging {
 			background-color: #8b29fc;
 			color: white;
 		}
+
 		#dragFileCollection.dragging {
 			background-color: #2996fc;
 			color: white;
 		}
+
 		.dragFileArea h2 {
 			margin: auto;
 		}
+
 		.hide {
-			display:  none;
+			display: none;
 		}
+
 		#fileList.show {
 			flex: 1;
 		}
+
 		#fileList p {
 			flex: 1;
 		}
+
 		#cancelButton.fancyButton {
-			background-color:#ff7979;
+			background-color: #ff7979;
 		}
+
 		#cancelButton.fancyButton:hover {
-			background-color:#a14c4c;
+			background-color: #a14c4c;
 		}
+
 		footer {
 			text-align: center;
 			padding: 5px;
@@ -192,13 +217,13 @@
 	<script type="text/javascript" charset="utf-8">
 		const { ipcRenderer } = require('electron')
 		function askShutdown() {
-			if(confirm('Exit?')){
+			if (confirm('Exit?')) {
 				ipcRenderer.send('shutdown')
 			}
 		}
 		onkeydown = function (e) {
-			if(e.which === 27) {
-				if(fileCollection.length > 0) {
+			if (e.which === 27) {
+				if (fileCollection.length > 0) {
 					cancelCollection()
 				} else {
 					askShutdown()
@@ -208,13 +233,12 @@
 		function refreshDirectory(event) {
 			document.getElementById('loading').style.display = ''
 			let deleteThese = document.getElementsByClassName('deleteOnRefresh')
-			while(deleteThese[0]) {
+			while (deleteThese[0]) {
 				deleteThese[0].parentNode.removeChild(deleteThese[0])
 			}
 			ipcRenderer.send('selectedDirectory', currentFolder)
 		}
 		function selectDirectory(event) {
-			console.log('folderSelected')
 			ipcRenderer.send('selectDirectory')
 			document.getElementById('loading').style.display = ''
 		}
@@ -233,7 +257,7 @@
 		}
 		ipcRenderer.on('folderSelected', function (event, folder) {
 			currentFolder = folder
-			if(!folder) {	
+			if (!folder) {
 				document.getElementById('folderIndicator').innerHTML = 'No folder selected'
 				document.getElementById('selectFolderButton').innerHTML = 'Select a Folder'
 			} else {
@@ -251,109 +275,96 @@
 		ipcRenderer.on('pdfFileMerged', function (event, outFilePath) {
 			alert('File merged' + outFilePath)
 		})
-		
+
 		let draggables = document.getElementsByClassName('draggable')
 		Array.prototype.forEach.call(draggables, function (draggable) {
 			setDragStart(draggable)
 		})
 		const handleOndrop = (e) => {
-			e.preventDefault();
-			console.log('are we here at all?')
-			
-            for (let f of e.dataTransfer.files) {
+			e.preventDefault()
+
+			for (let f of e.dataTransfer.files) {
 				console.log('File(s) you dragged here: ', f.path)
-            }
-            
-            return false;
-        }
+			}
+
+			return false
+		}
 		// document.getElementById('noselect').ondrop = handleOndrop
-		var holderInstant = document.getElementById('dragFileInstant');
-		var holderCollection = document.getElementById('dragFileCollection');
+		var holderInstant = document.getElementById('dragFileInstant')
+		var holderCollection = document.getElementById('dragFileCollection')
 
-        holderInstant.ondragover = () => {
+		holderInstant.ondragover = () => {
 			document.getElementById('dragFileInstant').classList.add('dragging')
-            return false;
-        };
+			return false
+		}
 
-        holderInstant.ondragleave = () => {
+		holderInstant.ondragleave = () => {
 			document.getElementById('dragFileInstant').classList.remove('dragging')
-            return false;
-        };
-		
-        holderInstant.ondragend = () => {
-			document.getElementById('dragFileInstant').classList.remove('dragging')
-            return false;
-        };
+			return false
+		}
 
-        holderInstant.ondrop = (e) => {
-			e.preventDefault();
+		holderInstant.ondragend = () => {
 			document.getElementById('dragFileInstant').classList.remove('dragging')
-			console.log('dropped here')
+			return false
+		}
+
+		holderInstant.ondrop = (e) => {
+			e.preventDefault()
+			document.getElementById('dragFileInstant').classList.remove('dragging')
 			let filePaths = []
-            for (let f of e.dataTransfer.files) {
+			for (let f of e.dataTransfer.files) {
 				filePaths.push(f.path)
-                console.log('File(s) you dragged here: ', f.path)
-            }
-			console.log('e', e)
-			console.log('e.dataTransfer.files', e.dataTransfer.files)
-			console.log('typeof e.dataTransfer.files', typeof e.dataTransfer.files)
-			if(filePaths.length <= 1) {
+				console.log('File(s) you dragged here: ', f.path)
+			}
+			if (filePaths.length <= 1) {
 				alert(filePaths.length + ' files selected. Won\'t merge')
 			} else {
 				ipcRenderer.send('mergePDFFiles', filePaths)
 			}
 
-            return false;
-        };
-        holderCollection.ondragover = () => {
+			return false
+		}
+		holderCollection.ondragover = () => {
 			document.getElementById('dragFileCollection').classList.add('dragging')
-            return false;
-        };
+			return false
+		}
 
-        holderCollection.ondragleave = () => {
+		holderCollection.ondragleave = () => {
 			document.getElementById('dragFileCollection').classList.remove('dragging')
-            return false;
-        };
-		
-        holderCollection.ondragend = () => {
+			return false
+		}
+
+		holderCollection.ondragend = () => {
 			document.getElementById('dragFileCollection').classList.remove('dragging')
-            return false;
-        };
+			return false
+		}
 		let fileCollection = []
-        holderCollection.ondrop = (e) => {
+		holderCollection.ondrop = (e) => {
 			// Add to collection
 			document.getElementById('dragFileInstant').classList.add('hide')
 			e.preventDefault();
 			document.getElementById('dragFileCollection').classList.remove('dragging')
-			console.log('dropped here')
 			let fileList = document.getElementById('fileList')
 			let filesGreaterThanZero = false
-            for (let f of e.dataTransfer.files) {
+			for (let f of e.dataTransfer.files) {
 				filesGreaterThanZero = true
 				fileCollection.push(f.path)
 				let newFile = document.createElement('p')
 				newFile.innerHTML = f.path
 				fileList.appendChild(newFile)
-                console.log('File(s) you dragged here: ', f.path)
+				console.log('File(s) you dragged here: ', f.path)
 			}
 
-			if(filesGreaterThanZero) {
-				console.log('adding class show')
+			if (filesGreaterThanZero) {
 				fileList.classList.add('show')
 				document.getElementById('confirmButton').classList.remove('hide')
 				document.getElementById('cancelButton').classList.remove('hide')
-			} else {
-				console.log('not adding class show')
-				console.log('filePaths', filePaths)
 			}
-			
-			console.log('e', e)
-			console.log('e.dataTransfer.files', e.dataTransfer.files)
-			console.log('typeof e.dataTransfer.files', typeof e.dataTransfer.files)
 			ipcRenderer.send('mergePDFFiles', filePaths)
 
-            return false;
-        };
+			return false
+		}
+
 		function cancelCollection() {
 			fileCollection = []
 			document.getElementById('dragFileInstant').classList.remove('hide')
@@ -374,8 +385,8 @@
 			fileCollection = []
 		}
 
-</script>
-<footer>© 2019 - Stephan Nordnes Eriksen</footer>
+	</script>
+	<footer>© 2019 - Stephan Nordnes Eriksen</footer>
 </body>
 
 </html>

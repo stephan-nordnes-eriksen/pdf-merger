@@ -1,7 +1,6 @@
 // @ts-check
 const { app, BrowserWindow, ipcMain, shell, dialog, Menu } = require('electron')
 const util = require('util')
-const exec = util.promisify(require('child_process').exec)
 const path = require('path')
 const fixPath = require('fix-path')
 const hummus = require('hummus')
@@ -126,7 +125,7 @@ function createWindow() {
 	Menu.setApplicationMenu(menu)
 	// and load the index.html of the app.
 	win.loadFile('index.html')
-	// win.setMenu(null)
+
 	// Open the DevTools.
 	// win.webContents.openDevTools()
 
@@ -168,10 +167,9 @@ ipcMain.on('shutdown', (event) => {
 })
 
 ipcMain.on('ondragstart', (event, filePath) => {
-	console.log({filePath})
 	event.sender.startDrag({
 		file: filePath,
-		icon: Electron.NativeImage.createFromPath(path.resolve('./git.png'))
+		icon: Electron.NativeImage.createFromPath(path.resolve('./assets/pdf.png'))
 	})
 })
 let currentFilePath
@@ -196,7 +194,7 @@ function remoteError(...data) {
 }
 
 ipcMain.on('selectedDirectory', (event, filePath) => {
-	remoteLog('selectedDrie', filePath)
+	remoteLog('selectedDirectory', filePath)
 })
 ipcMain.on('selectDirectory', (event) => {
 	dialog.showOpenDialog(win, {
@@ -208,10 +206,6 @@ ipcMain.on('selectDirectory', (event) => {
 			}
 		})
 })
-
-
-/////////////
-
 
 function mergePDFFiles(outputPath, pdfFilePaths) {
 	var pdfWriter = hummus.createWriter(outputPath)
