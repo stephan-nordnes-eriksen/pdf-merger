@@ -29,6 +29,6 @@
 	},
 	"dependencies": {
 		"fix-path": "^2.1.0",
-		"hummus": "^1.0.107"
+		"hummus": "^1.0.111"
 	}
 }
